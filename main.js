@@ -18,5 +18,6 @@ function showLayout(){
 btnRestart.addEventListener("click",showInput)
 function showInput(){
     inputPageDiv.style.display="inline";
+    btnRestart.style.display="none";
     buildLayout.style.display="none";
 }

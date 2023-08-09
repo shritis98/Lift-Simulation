@@ -1,8 +1,8 @@
-var inputPageDiv=document.getElementById("input-page");
+var inputPageDiv=document.querySelector("#input-page");
 var btnSubmit=document.querySelector("#btn-submit");
 var outputDiv=document.querySelector("#output");
-var btnRestart=document.getElementById("btn-restart");
-var buildLayout=document.getElementById("layout")
+var btnRestart=document.querySelector("#btn-restart");
+var buildLayout=document.querySelector("#layout")
 
 btnSubmit.addEventListener("click",showLayout)
 function showLayout(){
@@ -11,8 +11,11 @@ function showLayout(){
     console.log(noOfFloors);
     console.log(noOfLifts);
     inputPageDiv.style.display="none";
-    btnRestart.style.display="inline";
-    buildLayout.style.display="inline";
+    btnRestart.style.display="block";
+    for(let i=1;i<=5;i++){
+    buildLayout.style.display="block";
+    console.log(buildLayout);
+    }
 
 }
 btnRestart.addEventListener("click",showInput)

@@ -14,7 +14,7 @@ function showLayout(){
     inputPageDiv.style.display="none";
     btnRestart.style.display="block";
 
-    if(noOfFloors<=10 && noOfLifts<=10){
+    if(noOfFloors<=10 && noOfFloors>=1 && noOfLifts<=10 && noOfLifts>=1){
     
         for(var i=noOfFloors;i>=0;i--){
             
@@ -35,28 +35,23 @@ function showLayout(){
             buildLayout.appendChild(floorDesign);
 
         }
-
         for(var i=1;i<=noOfLifts;i++){
 
             const liftDesign=document.createElement('div');
             liftDesign.setAttribute("class","liftDesign");
             floorDesign.appendChild(liftDesign)
-
         }
 
-    }else{
-    if(noOfFloors>10 && noOfLifts>10){
+    }else if(noOfFloors>10 && noOfLifts>10){
         alert("Maximum number of floors and lifts can be 10");
     }else if(noOfFloors>10){
         alert("Maximum number of floors can be 10");
-        focus.inputPageDiv;
     }else if(noOfLifts>10){
         alert("Maximum number of lifts can be 10");
-        focus.inputPageDiv;
-    }else{
-        alert("Number of floors and lifts cannot be negative");
+    }else if(noOfFloors<=0 || noOfLifts<=0){
+        alert("Number of floors or lifts cannot be 0 or negative");
     }
-    }
+
 
 }
 

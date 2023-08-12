@@ -1,0 +1,41 @@
+#input-page{
+    text-align: center;
+    padding:20px;
+    border:solid black;
+    position:absolute;
+}
+#btn-restart{
+    display:none;
+    margin-bottom: 20px;
+    
+}
+.floorNo{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid black;
+}
+
+.upBtn{
+    display:flex;
+    margin-top: 5px;
+    margin-bottom:5px;
+    padding-left: 14px;
+    padding-right: 15px;
+}
+
+.downBtn{
+    display:flex;
+    margin-top: 5px;
+    margin-bottom:10px;
+}
+
+.liftDesign{
+    height: 80px;
+    width:60px;
+    border:1px solid black;
+    position:relative;
+    left: 100px;
+    bottom:90px;
+    float: left;
+    margin-right: 20px;
+}

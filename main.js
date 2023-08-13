@@ -17,31 +17,36 @@ function showLayout(){
     if(noOfFloors<=10 && noOfFloors>=1 && noOfLifts<=10 && noOfLifts>=1){
     
         for(var i=noOfFloors;i>=0;i--){
-            
+
             const floorNo=document.createElement('div');
             floorNo.setAttribute("class","floorNo")
             const upBtn=document.createElement("button");
             upBtn.setAttribute("class","upBtn")
             const downBtn=document.createElement("button");
             downBtn.setAttribute("class","downBtn");
-            
+
             floorNo.textContent="Floor "+i;
             floorNo.appendChild(upBtn);
-            upBtn.textContent="Up";
             floorNo.appendChild(downBtn);
-            downBtn.textContent="Down";
-
             floorDesign.appendChild(floorNo);
             buildLayout.appendChild(floorDesign);
-
-        }
+            
+            if(i>0 && i<noOfFloors){
+            upBtn.textContent="Up";
+            downBtn.textContent="Down";
+            }else if (i==0){
+                upBtn.textContent="Up";
+                floorNo.removeChild(downBtn);
+            }else if (i==noOfFloors){
+                floorNo.removeChild(upBtn);
+                downBtn.textContent="Down";
+            }
+        }    
         for(var i=1;i<=noOfLifts;i++){
-
             const liftDesign=document.createElement('div');
             liftDesign.setAttribute("class","liftDesign");
-            floorDesign.appendChild(liftDesign)
+            floorDesign.appendChild(liftDesign);
         }
-
     }else if(noOfFloors>10 && noOfLifts>10){
         alert("Maximum number of floors and lifts can be 10");
     }else if(noOfFloors>10){
@@ -51,8 +56,8 @@ function showLayout(){
     }else if(noOfFloors<=0 || noOfLifts<=0){
         alert("Number of floors or lifts cannot be 0 or negative");
     }
-
-
+    
+    
 }
 
 btnRestart.addEventListener("click",showInput)

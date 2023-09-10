@@ -3,7 +3,7 @@ var btnSubmit=document.querySelector("#btn-submit");
 var outputDiv=document.querySelector("#output");
 var btnRestart=document.querySelector("#btn-restart");
 var buildLayout=document.querySelector("#layout");
-const floorDesign=document.createElement('div');
+let floorDesign=document.createElement('div');
 floorDesign.setAttribute("class","floorDesign");
     
 btnSubmit.addEventListener("click",showLayout)
@@ -18,12 +18,15 @@ function showLayout(){
     
         for(var i=noOfFloors;i>=0;i--){
 
-            const floorNo=document.createElement('div');
+            let floorNo=document.createElement('div');
             floorNo.setAttribute("class","floorNo")
-            const upBtn=document.createElement("button");
+            floorNo.setAttribute("id","floorNo"+i)
+            let upBtn=document.createElement("button");
             upBtn.setAttribute("class","upBtn")
-            const downBtn=document.createElement("button");
+            upBtn.setAttribute("id","upBtn"+i)
+            let downBtn=document.createElement("button");
             downBtn.setAttribute("class","downBtn");
+            downBtn.setAttribute("id","downBtn"+i);
 
             floorNo.textContent="Floor "+i;
             floorNo.appendChild(upBtn);
@@ -43,9 +46,10 @@ function showLayout(){
             }
         }    
         for(var i=1;i<=noOfLifts;i++){
-            const liftDesign=document.createElement('div');
+            let liftDesign=document.createElement('div');
             liftDesign.setAttribute("class","liftDesign");
             floorDesign.appendChild(liftDesign);
+            let liftArray = Array.from(liftDesign);
         }
     }else if(noOfFloors>10 && noOfLifts>10){
         alert("Maximum number of floors and lifts can be 10");
@@ -55,10 +59,16 @@ function showLayout(){
         alert("Maximum number of lifts can be 10");
     }else if(noOfFloors<=0 || noOfLifts<=0){
         alert("Number of floors or lifts cannot be 0 or negative");
-    }
-    
-    
+    }   
 }
+// let Butn;
+// Butn.forEach((upBtn)=>{
+//     upBtn.addEventListener("click",()=>{
+//         let presentFloor=upBtn.getAttribute("id")
+//         console.log("button is on floor "+floorNo)
+//     })
+    
+// })
 
 btnRestart.addEventListener("click",showInput)
 function showInput(){

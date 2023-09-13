@@ -33,13 +33,13 @@ btnSubmit.addEventListener("click", checkInput);
 
 const buildLayout = (noOfFloors)=>{
 
-    console.log(noOfFloors);
+    // console.log(noOfFloors);
     let floorLayout=document.createElement('div');
     floorLayout.setAttribute("class", "floorlay")
     layout.append(floorLayout);
 
-    for(let i=noOfFloors;i>0;i--){
-        console.log(i);
+    for(let i=noOfFloors-1;i>=0;i--){
+        // console.log(i);
 
         let floorContainer=document.createElement('div');
             floorContainer.setAttribute("class","floor");
@@ -51,51 +51,96 @@ const buildLayout = (noOfFloors)=>{
         
         let upBtn=document.createElement("button");
             upBtn.setAttribute("class","btn");
-            upBtn.setAttribute("id","upBtn"+i)
+            upBtn.setAttribute("id","upBtn"+i);
+            upBtn.setAttribute("data-buttonFloor",i);
+            upBtn.setAttribute("data-direction","Up");
             upBtn.innerText="Up";
         let downBtn=document.createElement("button");
             downBtn.setAttribute("class","btn");
             downBtn.setAttribute("id","downBtn"+i);
+            downBtn.setAttribute("data-buttonFloor",i);
+            downBtn.setAttribute("data-direction","Down");
             downBtn.innerText="Down";
+            
         let floorNumber=document.createElement("p")
-            floorNumber.innerText="Floor"+i;
+            floorNumber.innerText="Floor "+i;
             
         btnContainer.append(upBtn, downBtn, floorNumber);
         floorContainer.append(btnContainer);
         floorLayout.append(floorContainer);
     }
-    consolebtn();
+    // consolebtn();
+    moveLift();
 }
 
-const consolebtn = ()=>{
-    let button = document.querySelectorAll(".btn");
-    button.forEach((butn)=>{
-        butn.addEventListener("click",()=>{
-            const floorNo = butn.getAttribute("id");
-            console.log(floorNo);
-        })
-    })
-    }
+// const consolebtn = ()=>{
+//     let button = document.querySelectorAll(".btn");
+//     button.forEach((butn)=>{
+//         butn.addEventListener("click",()=>{
+//             const floorNo = butn.getAttribute("id");
+//             console.log(floorNo);
+//         })
+//     })
+//     }
 
 const buildLift = (noOfLifts)=>{
-    console.log(noOfLifts);
+    // console.log(noOfLifts);
     let liftLayout=document.createElement('div')
     liftLayout.setAttribute("class", "liftLay")
     for(let i=0;i<noOfLifts;i++){
-        console.log(i);
+        // console.log(i);
         let liftContainer=document.createElement('div');
             liftContainer.setAttribute("class", "lift");
             liftContainer.setAttribute("id", "idlift"+i);
+            liftContainer.setAttribute("data-liftNumber", i);
+            liftContainer.setAttribute("data-liftFloor", 1);
+            liftContainer.setAttribute("data-liftAvailable", "available");
+        let leftGate = document.createElement("div");
+            leftGate.setAttribute("class", "lGate");
+        let rightGate = document.createElement("div");
+            rightGate.setAttribute("class", "rGate");
+
+            liftContainer.append(leftGate, rightGate);
             liftLayout.append(liftContainer);
     } 
-    floorCont1.append(liftLayout);
-    consolelift();
+    floorCont0.append(liftLayout);
+    // consolelift();
 }
 
-const consolelift = ()=>{
+// const consolelift = ()=>{
+//     const liftObj = document.querySelectorAll(".lift");
+//     let liftArray = Array.from(liftObj);
+//     console.log(liftArray);
+// }
+
+const moveLift = ()=>{
     const liftObj = document.querySelectorAll(".lift");
     let liftArray = Array.from(liftObj);
     console.log(liftArray);
+
+    let buttonsClicked = [0];
+    let buttons = document.querySelectorAll(".btn");
+    buttons.forEach((butn)=>{
+        butn.addEventListener("click",()=>{
+
+            const floorNo = butn.getAttribute("data-buttonFloor");
+            let totalBtnsClkd = buttonsClicked.push(floorNo);
+            // console.log(totalBtnsClkd);
+            console.log("The button clicked is "+buttonsClicked);
+
+            
+            let distance = (-6.3)*(Number(floorNo))
+            document.querySelector(".lift").style.transform = `translateY(${distance}rem)`;
+
+
+            let diffInFloors = Math.abs(2*(buttonsClicked[0]-buttonsClicked[1]));
+            console.log(diffInFloors);
+            document.querySelector(".lift").style.transition = `transform ${diffInFloors}s`;
+            let floorReached = buttonsClicked.shift();
+            console.log(floorReached, buttonsClicked);
+        })
+    })
+    
 }
 
 const reset=()=>{

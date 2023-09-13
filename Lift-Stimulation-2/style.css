@@ -32,13 +32,29 @@ p{
     display:flex;
     border-bottom: 1px solid black;
     width:63rem;
+    height: 6.23rem;
 }
 
 .lift{
-    height: 6.2rem;
+    display:flex;
+    height: 5.12rem;
     width:4.5rem;
     border:1px solid black;
-    margin: 0.5rem;
+    margin-right: 0.5rem;
+    margin-left: 0.5rem;
+    margin-top:0.5rem
+}
+
+.lGate{
+    height: 5rem;
+    width:2.12rem;
+    border:1px solid black;;
+}
+
+.rGate{
+    height: 5rem;
+    width:2.12rem;
+    border:1px solid black;
 }
 
 .liftLay{

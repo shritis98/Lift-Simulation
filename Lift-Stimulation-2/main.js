@@ -42,7 +42,7 @@ const buildLayout = (noOfFloors)=>{
 
         let floorContainer=document.createElement('div');
             floorContainer.setAttribute("class","floor");
-            // floorContainer.setAttribute("id","floorCont"+i);
+            floorContainer.setAttribute("id","floorCont"+i);
 
         let btnContainer = document.createElement('div');
             btnContainer.setAttribute("class", "btnCont");

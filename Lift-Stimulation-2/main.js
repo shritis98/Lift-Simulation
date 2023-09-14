@@ -2,9 +2,8 @@ const inputPage=document.querySelector("#input-page");
 const btnSubmit=document.querySelector("#btn-submit");
 const layout=document.querySelector("#layout");
 
-//WHY DOES CHECKINPUT NOT WORK WHEN KEPT HERE?
-// const noOfFloors= parseInt(document.querySelector("#no-of-floors").value);
-// const noOfLifts=parseInt(document.querySelector("#no-of-lifts").value);
+const noOfFloors= parseInt(document.querySelector("#no-of-floors").value);
+const noOfLifts=parseInt(document.querySelector("#no-of-lifts").value);
 
 
 const checkInput = ()=>{
@@ -14,7 +13,7 @@ const checkInput = ()=>{
     if(noOfFloors<=10 && noOfFloors>=1 && noOfLifts<=10 && noOfLifts>=1){
         inputPage.style.display = "none";
         reset()
-        buildLayout(noOfFloors)//WHY THIS NEEDS TO BE MENTIONED IN BOTH THE PLACES?
+        buildLayout(noOfFloors)
         buildLift(noOfLifts)
     }else if(noOfFloors>10 && noOfLifts>10){
         alert("Maximum number of floors and lifts can be 10");
@@ -35,7 +34,7 @@ const buildLayout = (noOfFloors)=>{
 
     // console.log(noOfFloors);
     let floorLayout=document.createElement('div');
-    floorLayout.setAttribute("class", "floorlay")
+    floorLayout.setAttribute("class", "floorlay");
     layout.append(floorLayout);
 
     for(let i=noOfFloors-1;i>=0;i--){
@@ -43,45 +42,40 @@ const buildLayout = (noOfFloors)=>{
 
         let floorContainer=document.createElement('div');
             floorContainer.setAttribute("class","floor");
-            floorContainer.setAttribute("id","floorCont"+i);
+            // floorContainer.setAttribute("id","floorCont"+i);
 
         let btnContainer = document.createElement('div');
             btnContainer.setAttribute("class", "btnCont");
-            btnContainer.setAttribute("id", "btnCont"+i);
+            // btnContainer.setAttribute("id", "btnCont"+i);
         
         let upBtn=document.createElement("button");
             upBtn.setAttribute("class","btn");
-            upBtn.setAttribute("id","upBtn"+i);
+            // upBtn.setAttribute("id","upBtn"+i);
             upBtn.setAttribute("data-buttonFloor",i);
-            upBtn.setAttribute("data-direction","Up");
+            // upBtn.setAttribute("data-direction","Up");
             upBtn.innerText="Up";
         let downBtn=document.createElement("button");
             downBtn.setAttribute("class","btn");
-            downBtn.setAttribute("id","downBtn"+i);
+            // downBtn.setAttribute("id","downBtn"+i);
             downBtn.setAttribute("data-buttonFloor",i);
-            downBtn.setAttribute("data-direction","Down");
+            // downBtn.setAttribute("data-direction","Down");
             downBtn.innerText="Down";
             
-        let floorNumber=document.createElement("p")
+        let floorNumber=document.createElement("p");
             floorNumber.innerText="Floor "+i;
-            
-        btnContainer.append(upBtn, downBtn, floorNumber);
+        if(i==noOfFloors-1){
+            btnContainer.append(downBtn, floorNumber);
+        }else if(i==0){
+            btnContainer.append(upBtn, floorNumber);
+        }else{
+            btnContainer.append(upBtn, downBtn, floorNumber);
+        }
         floorContainer.append(btnContainer);
         floorLayout.append(floorContainer);
     }
-    // consolebtn();
-    moveLift();
+    buttonsClicked();
+    // moveLift();
 }
-
-// const consolebtn = ()=>{
-//     let button = document.querySelectorAll(".btn");
-//     button.forEach((butn)=>{
-//         butn.addEventListener("click",()=>{
-//             const floorNo = butn.getAttribute("id");
-//             console.log(floorNo);
-//         })
-//     })
-//     }
 
 const buildLift = (noOfLifts)=>{
     // console.log(noOfLifts);
@@ -91,9 +85,9 @@ const buildLift = (noOfLifts)=>{
         // console.log(i);
         let liftContainer=document.createElement('div');
             liftContainer.setAttribute("class", "lift");
-            liftContainer.setAttribute("id", "idlift"+i);
-            liftContainer.setAttribute("data-liftNumber", i);
-            liftContainer.setAttribute("data-liftFloor", 1);
+            // liftContainer.setAttribute("id", "idlift"+i);
+            // liftContainer.setAttribute("data-liftNumber", i);
+            liftContainer.setAttribute("data-liftFloor", 0);
             liftContainer.setAttribute("data-liftAvailable", "available");
         let leftGate = document.createElement("div");
             leftGate.setAttribute("class", "lGate");
@@ -104,42 +98,63 @@ const buildLift = (noOfLifts)=>{
             liftLayout.append(liftContainer);
     } 
     floorCont0.append(liftLayout);
+    
+    // checkAvailableLift(liftArray);
     // consolelift();
+    // moveLift();
 }
 
-// const consolelift = ()=>{
-//     const liftObj = document.querySelectorAll(".lift");
-//     let liftArray = Array.from(liftObj);
-//     console.log(liftArray);
-// }
+const buttonsClicked = ()=>{
+    let button = document.querySelectorAll(".btn");
+    let buttonsClicked = [0];
+    button.forEach((butn)=>{
+        butn.addEventListener("click",()=>{
+            const floorNo = butn.getAttribute("data-buttonFloor");
+            console.log(floorNo);
+            let totalBtnsClkd = buttonsClicked.push(floorNo);
+            console.log("Recent button is: "+totalBtnsClkd);
+            console.log("All the buttons clicked are "+buttonsClicked);
+            AvailableLift(buttonsClicked, floorNo);
+        })
+        
+    })
+    
+}
 
-const moveLift = ()=>{
+const AvailableLift = (buttonsClicked, floorNo)=>{
     const liftObj = document.querySelectorAll(".lift");
     let liftArray = Array.from(liftObj);
-    console.log(liftArray);
+    // console.log(liftArray);
+    let AvlblLiftNo=liftArray.length;
+    for(let i=0; i<AvlblLiftNo;i++){
 
-    let buttonsClicked = [0];
-    let buttons = document.querySelectorAll(".btn");
-    buttons.forEach((butn)=>{
-        butn.addEventListener("click",()=>{
+        if(liftArray[i].getAttribute("data-liftAvailable") == "available"){
+            AvlblLiftNo = i;
+            // console.log(AvlblLiftNo);
+        }
+        // console.log(liftArray[i])
+    }
+    // console.log(AvlblLiftNo);
+    let distance = (-6.3)*(Number(floorNo))
+    let diffInFloors = Math.abs(2*(buttonsClicked[0]-buttonsClicked[1]));
+    let currentFloor = Number(floorNo);
+    moveLift(liftArray, AvlblLiftNo, distance, diffInFloors, currentFloor)
+}
 
-            const floorNo = butn.getAttribute("data-buttonFloor");
-            let totalBtnsClkd = buttonsClicked.push(floorNo);
-            // console.log(totalBtnsClkd);
-            console.log("The button clicked is "+buttonsClicked);
+const moveLift = (liftArray, AvlblLiftNo, distance, diffInFloors, currentFloor)=>{
+    // console.log(liftArray);
+    // console.log(AvlblLiftNo);
+    // console.log(distance);
+    // console.log(diffInFloors);
+    // console.log(currentFloor);
 
-            
-            let distance = (-6.3)*(Number(floorNo))
-            document.querySelector(".lift").style.transform = `translateY(${distance}rem)`;
+    liftArray[AvlblLiftNo].setAttribute("data-liftAvailable", "busy");
+    
+    liftArray[AvlblLiftNo].style.transform = `translateY(${distance}rem)`;
+    liftArray[AvlblLiftNo].style.transition = `transform ${diffInFloors}s`;
 
-
-            let diffInFloors = Math.abs(2*(buttonsClicked[0]-buttonsClicked[1]));
-            console.log(diffInFloors);
-            document.querySelector(".lift").style.transition = `transform ${diffInFloors}s`;
-            let floorReached = buttonsClicked.shift();
-            console.log(floorReached, buttonsClicked);
-        })
-    })
+    liftArray[AvlblLiftNo].setAttribute("data-liftFloor", currentFloor);
+    // liftArray[AvlblLiftNo].setAttribute("data-liftAvailable", "available");
     
 }
 
@@ -160,3 +175,7 @@ const reset=()=>{
         inputPage.style.display = "block";
     });
 }
+
+
+
+

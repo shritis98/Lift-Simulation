@@ -46,7 +46,7 @@ const buildLayout = (noOfFloors)=>{
 
         let btnContainer = document.createElement('div');
             btnContainer.setAttribute("class", "btnCont");
-            // btnContainer.setAttribute("id", "btnCont"+i);
+            btnContainer.setAttribute("id", "btnCont"+i);
         
         let upBtn=document.createElement("button");
             upBtn.setAttribute("class","btn");
@@ -73,7 +73,7 @@ const buildLayout = (noOfFloors)=>{
         floorContainer.append(btnContainer);
         floorLayout.append(floorContainer);
     }
-    buttonsClicked();
+    buttonClick();
     // moveLift();
 }
 
@@ -104,15 +104,15 @@ const buildLift = (noOfLifts)=>{
     // moveLift();
 }
 
-const buttonsClicked = ()=>{
+function buttonClick(){
     let button = document.querySelectorAll(".btn");
-    let buttonsClicked = [0];
+    let buttonsClicked = [];
     button.forEach((butn)=>{
         butn.addEventListener("click",()=>{
             const floorNo = butn.getAttribute("data-buttonFloor");
-            console.log(floorNo);
+            console.log( "This is recent click floorNo"+floorNo);
             let totalBtnsClkd = buttonsClicked.push(floorNo);
-            console.log("Recent button is: "+totalBtnsClkd);
+            // console.log("total number of buttons clicked are "+totalBtnsClkd);
             console.log("All the buttons clicked are "+buttonsClicked);
             AvailableLift(buttonsClicked, floorNo);
         })
@@ -121,42 +121,77 @@ const buttonsClicked = ()=>{
     
 }
 
-const AvailableLift = (buttonsClicked, floorNo)=>{
+function AvailableLift(buttonsClicked, floorNo){
     const liftObj = document.querySelectorAll(".lift");
     let liftArray = Array.from(liftObj);
+    
     // console.log(liftArray);
-    let AvlblLiftNo=liftArray.length;
-    for(let i=0; i<AvlblLiftNo;i++){
+    // let AvlblLiftNo=liftArray.length;
+    
+    let closest;
+    let minDistance = Infinity;
+    for(let i=0; i<liftArray.length;i++){
 
         if(liftArray[i].getAttribute("data-liftAvailable") == "available"){
-            AvlblLiftNo = i;
+            let liftCalled = liftArray[i].getAttribute("data-liftFloor")
+            let difference = Math.abs(floorNo-liftCalled)
+            if(minDistance > difference){
+                closest = i;
+                minDistance = difference;
+            }
+            // AvlblLiftNo = i;
             // console.log(AvlblLiftNo);
         }
         // console.log(liftArray[i])
     }
     // console.log(AvlblLiftNo);
+    console.log( liftArray[closest]);
+    let floorCalled = liftArray[closest].getAttribute("data-liftFloor");
     let distance = (-6.3)*(Number(floorNo))
-    let diffInFloors = Math.abs(2*(buttonsClicked[0]-buttonsClicked[1]));
+    let diffInFloors = Math.abs(2*(Number(floorNo)-floorCalled));
     let currentFloor = Number(floorNo);
-    moveLift(liftArray, AvlblLiftNo, distance, diffInFloors, currentFloor)
+    // setTimeout(()=>{
+    // buttonsClicked.shift();
+    // }, (diffInFloors*1000))
+    moveLift(liftArray, closest, distance, diffInFloors, currentFloor, buttonsClicked)
 }
 
-const moveLift = (liftArray, AvlblLiftNo, distance, diffInFloors, currentFloor)=>{
+function moveLift(liftArray, closest, distance, diffInFloors, currentFloor, buttonsClicked){
     // console.log(liftArray);
-    // console.log(AvlblLiftNo);
+    // console.log(closest);
     // console.log(distance);
-    // console.log(diffInFloors);
-    // console.log(currentFloor);
-
-    liftArray[AvlblLiftNo].setAttribute("data-liftAvailable", "busy");
+    // console.log(buttonsClicked);
+    console.log("this is the time required"+diffInFloors);
     
-    liftArray[AvlblLiftNo].style.transform = `translateY(${distance}rem)`;
-    liftArray[AvlblLiftNo].style.transition = `transform ${diffInFloors}s`;
+    setTimeout(()=>{
+        liftArray[closest].setAttribute("data-liftAvailable", "busy");
+        liftArray[closest].style.transform = `translateY(${distance}rem)`;
+        liftArray[closest].style.transition = `transform ${diffInFloors}s`;
+        liftArray[closest].setAttribute("data-liftFloor", currentFloor);
+    }, 0)
 
-    liftArray[AvlblLiftNo].setAttribute("data-liftFloor", currentFloor);
+    setTimeout(()=>{
+        liftArray[closest].children[0].style.transform = `translateX(${-100}%)`;
+        liftArray[closest].children[0].style.transition = `transform ${2.5}s`;
+        liftArray[closest].children[1].style.transform = `translateX(${100}%)`;
+        liftArray[closest].children[1].style.transition = `transform ${2.5}s`;
+    },(diffInFloors*1000))
+
+    setTimeout(()=>{
+        liftArray[closest].children[0].style.transform = `translateX(${0}%)`;
+        liftArray[closest].children[0].style.transition = `transform ${2.5}s`;
+        liftArray[closest].children[1].style.transform = `translateX(${-0}%)`;
+        liftArray[closest].children[1].style.transition = `transform ${2.5}s`;
+    },((diffInFloors*1000)+2500))
+
+    setTimeout(()=>{
+        liftArray[closest].setAttribute("data-liftAvailable", "available");
+        // buttonsClicked.shift();
+    }, ((diffInFloors*1000)+5000))
     // liftArray[AvlblLiftNo].setAttribute("data-liftAvailable", "available");
     
 }
+
 
 const reset=()=>{
     let resetBtn = document.createElement("button");
@@ -175,7 +210,3 @@ const reset=()=>{
         inputPage.style.display = "block";
     });
 }
-
-
-
-

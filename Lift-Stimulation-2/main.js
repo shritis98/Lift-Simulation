@@ -28,8 +28,6 @@ const checkInput = ()=>{
 
 btnSubmit.addEventListener("click", checkInput);
 
-
-
 const buildLayout = (noOfFloors)=>{
 
     // console.log(noOfFloors);
@@ -74,7 +72,7 @@ const buildLayout = (noOfFloors)=>{
         floorLayout.append(floorContainer);
     }
     buttonClick();
-    // moveLift();
+
 }
 
 const buildLift = (noOfLifts)=>{
@@ -85,8 +83,6 @@ const buildLift = (noOfLifts)=>{
         // console.log(i);
         let liftContainer=document.createElement('div');
             liftContainer.setAttribute("class", "lift");
-            // liftContainer.setAttribute("id", "idlift"+i);
-            // liftContainer.setAttribute("data-liftNumber", i);
             liftContainer.setAttribute("data-liftFloor", 0);
             liftContainer.setAttribute("data-liftAvailable", "available");
         let leftGate = document.createElement("div");
@@ -98,10 +94,7 @@ const buildLift = (noOfLifts)=>{
             liftLayout.append(liftContainer);
     } 
     floorCont0.append(liftLayout);
-    
-    // checkAvailableLift(liftArray);
-    // consolelift();
-    // moveLift();
+
 }
 
 function buttonClick(){
@@ -110,7 +103,7 @@ function buttonClick(){
     button.forEach((butn)=>{
         butn.addEventListener("click",()=>{
             const floorNo = butn.getAttribute("data-buttonFloor");
-            console.log( "This is recent click floorNo"+floorNo);
+            console.log( "This is recent click floorNo "+floorNo);
             let totalBtnsClkd = buttonsClicked.push(floorNo);
             // console.log("total number of buttons clicked are "+totalBtnsClkd);
             console.log("All the buttons clicked are "+buttonsClicked);
@@ -126,34 +119,46 @@ function AvailableLift(buttonsClicked, floorNo){
     let liftArray = Array.from(liftObj);
     
     // console.log(liftArray);
-    // let AvlblLiftNo=liftArray.length;
+
     
     let closest;
     let minDistance = Infinity;
+  
     for(let i=0; i<liftArray.length;i++){
 
         if(liftArray[i].getAttribute("data-liftAvailable") == "available"){
             let liftCalled = liftArray[i].getAttribute("data-liftFloor")
+            floorNo = buttonsClicked[0];
             let difference = Math.abs(floorNo-liftCalled)
             if(minDistance > difference){
                 closest = i;
                 minDistance = difference;
             }
-            // AvlblLiftNo = i;
-            // console.log(AvlblLiftNo);
+        }else if(allLiftBusy(liftArray)){
+            console.log("all lifts are busy");
         }
+        
         // console.log(liftArray[i])
     }
-    // console.log(AvlblLiftNo);
-    console.log( liftArray[closest]);
+    // console.log( liftArray[closest]);
     let floorCalled = liftArray[closest].getAttribute("data-liftFloor");
     let distance = (-6.3)*(Number(floorNo))
     let diffInFloors = Math.abs(2*(Number(floorNo)-floorCalled));
     let currentFloor = Number(floorNo);
-    // setTimeout(()=>{
-    // buttonsClicked.shift();
-    // }, (diffInFloors*1000))
+    buttonsClicked.shift();
+    // console.log(buttonsClicked);
     moveLift(liftArray, closest, distance, diffInFloors, currentFloor, buttonsClicked)
+
+}
+
+function allLiftBusy(liftArray){
+    for(let i=0;i<liftArray.length;i++){
+        if(liftArray[i].getAttribute("data-liftAvailable") == "available"){
+            return false;
+        }
+    }
+
+    return true;
 }
 
 function moveLift(liftArray, closest, distance, diffInFloors, currentFloor, buttonsClicked){
@@ -161,13 +166,14 @@ function moveLift(liftArray, closest, distance, diffInFloors, currentFloor, butt
     // console.log(closest);
     // console.log(distance);
     // console.log(buttonsClicked);
-    console.log("this is the time required"+diffInFloors);
+    console.log("this is the time required "+diffInFloors);
     
     setTimeout(()=>{
         liftArray[closest].setAttribute("data-liftAvailable", "busy");
         liftArray[closest].style.transform = `translateY(${distance}rem)`;
         liftArray[closest].style.transition = `transform ${diffInFloors}s`;
         liftArray[closest].setAttribute("data-liftFloor", currentFloor);
+        
     }, 0)
 
     setTimeout(()=>{
@@ -186,7 +192,10 @@ function moveLift(liftArray, closest, distance, diffInFloors, currentFloor, butt
 
     setTimeout(()=>{
         liftArray[closest].setAttribute("data-liftAvailable", "available");
-        // buttonsClicked.shift();
+        if (buttonsClicked.length !== 0){
+            floorNo = buttonsClicked[0];
+            AvailableLift(buttonsClicked, floorNo);
+        }
     }, ((diffInFloors*1000)+5000))
     // liftArray[AvlblLiftNo].setAttribute("data-liftAvailable", "available");
     
